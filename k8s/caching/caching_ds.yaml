@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: prepull
+spec:
+  selector:
+    matchLabels:
+      name: prepull 
+  template:
+    metadata:
+      labels:
+        name: prepull 
+    spec:
+      containers:
+      - name: prepull 
+        image: ubuntu:18.04
+        command: ["sleep", "10"]
+      

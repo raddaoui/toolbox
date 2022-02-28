@@ -1,0 +1,41 @@
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: placeholder
+value: 0
+preemptionPolicy: Never
+globalDefault: false
+description: 'placeholder'
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: normal
+value: 1
+preemptionPolicy: Never
+globalDefault: true              # default
+description: 'normal'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: placeholder
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: placeholder
+  template:
+    metadata:
+      labels:
+        app: placeholder
+    spec:
+      terminationGracePeriodSeconds: 0        # important
+      priorityClassName: placeholder          # important
+      containers:
+      - image: pause
+        name: placeholder
+        resources:
+          requests:
+            cpu: 800m # check nodepool VMs spec Standard_D2_v2
+        command: ["sleep", "10"]
